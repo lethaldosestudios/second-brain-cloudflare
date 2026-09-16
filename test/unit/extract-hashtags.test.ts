@@ -50,3 +50,17 @@ describe("extractHashtags", () => {
     expect(hashtags).toEqual(["tag_1", "item2"]);
   });
 });
+
+describe("hyphenated hashtags", () => {
+  it("keeps hyphenated tags as one tag", () => {
+    const { cleanContent, hashtags } = extractHashtags("note #motion-idea #steal-this #web-design");
+    expect(cleanContent).toBe("note");
+    expect(hashtags).toEqual(["motion-idea", "steal-this", "web-design"]);
+  });
+
+  it("treats pure digit/hyphen tags like issue refs, leaving them in content", () => {
+    const { cleanContent, hashtags } = extractHashtags("fix #298 note #ui-design");
+    expect(cleanContent).toBe("fix #298 note");
+    expect(hashtags).toEqual(["ui-design"]);
+  });
+});
